@@ -19,6 +19,8 @@ select * from customer_purchases where product_id=4 or product_id=9;
 
 -- option 2
 
+select * from customer_purchases where product_id in (4,9);
+
 /*2. Write a query that returns all customer purchases and a new calculated column 'price' (quantity * cost_to_customer_per_qty), 
 filtered by vendor IDs between 8 and 10 (inclusive) using either:
 	1.  two conditions using AND
@@ -69,9 +71,7 @@ of customers for them to give stickers to, sorted by last name, then first name.
 
 HINT: This query requires you to join two tables, use an aggregate function, and use the HAVING keyword. */
 
-With customer_id_data as (select distinct customer_id, sum(quantity*cost_to_customer_per_qty) as total_purchase from customer_purchases group by customer_id order by customer_id)
-
-select a.customer_id, a.total_purchase, concat(b.customer_first_name, ' ', b.customer_last_name) as customer_name from customer_id_data a left join customer b on a.customer_id=b.customer_id where a.total_purchase>2000 order by b.customer_last_name, b.customer_first_name;
+select a.customer_id, sum(a.quantity*a.cost_to_customer_per_qty) as total_purchase, concat(b.customer_first_name, ' ', b.customer_last_name) as customer_name from customer_purchases a left join customer b on a.customer_id=b.customer_id group by a.customer_id, b.customer_last_name, b.customer_first_name HAVING total_purchase>2000 order by a.customer_id, b.customer_last_name, b.customer_first_name;
 
 -- Tempo Table
 /* 1. Insert the original vendor table into a temp.new_vendor and then add a 10th vendor: 
@@ -107,4 +107,4 @@ Remember that money spent is quantity*cost_to_customer_per_qty.
 HINTS: you will need to AGGREGATE, GROUP BY, and filter...
 but remember, STRFTIME returns a STRING for your WHERE statement!! */
 
-select customer_id, sum(quantity*cost_to_customer_per_qty) as total_purchase_in_apr_2022 from customer_purchases where STRFTIME('%m',market_date)='04' and STRFTIME('%Y',market_date)='2022' group by customer_id order by customer_id
+select customer_id, sum(quantity*cost_to_customer_per_qty) as total_purchase_in_apr_2022 from customer_purchases where STRFTIME('%m',market_date)='04' and STRFTIME('%Y',market_date)='2022' group by customer_id order by customer_id;
