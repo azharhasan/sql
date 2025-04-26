@@ -45,6 +45,8 @@ There are several tools online you can use, I'd recommend [Draw.io](https://www.
 
 **HINT:** You do not need to create any data for this prompt. This is a conceptual model only. 
 
+
+
 #### Prompt 2
 We want to create employee shifts, splitting up the day into morning and evening. Add this to the ERD.
 
@@ -54,7 +56,13 @@ The store wants to keep customer addresses. Propose two architectures for the CU
 **HINT:** search type 1 vs type 2 slowly changing dimensions. 
 
 ```
-Your answer...
+Type 1 SCD overwrites old data with new data, so history is not preserved. Type 2 SCD adds a new record for each change, keeping a full history of changes.
+
+Customer Address Example:
+
+ -Type 1 SCD: When a customer’s address changes, the old address is replaced with the new one in the same row. Only the latest address is available.
+
+ -Type 2 SCD: When a customer’s address changes, a new row is added with the new address, and fields like customer_add_strt_date, customer_add_end_date, and customer_add_active_flag are used to track which address was valid when. All previous addresses are kept for historical reference.
 ```
 
 ***
